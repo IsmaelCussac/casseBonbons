@@ -1,0 +1,10 @@
+lvl::5
+col::5
+largeur::9
+hauteur::9
+coups::-1
+temps::30
+difficulte::-1
+points::2500
+suiv::lvl6.txt
+malus::4
