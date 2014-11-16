@@ -1,0 +1,10 @@
+lvl::7
+col::4
+largeur::8
+hauteur::7
+coups::20
+temps::-1
+difficulte::-1
+points::10000
+suiv::lvl8.txt
+malus::4

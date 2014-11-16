@@ -1,0 +1,104 @@
+package com.jeupoo.main;
+
+public class Verification {
+	
+	public static int verificationVerticaleHaut(GridPrinc grid,int couleur, int i,int j){
+		
+		int nbr = 0;
+		int k=i-1;
+		
+		while (k>=0 && type(grid.grille[k][j].mCase.getIndice(), couleur)){
+			nbr++;
+			k--;
+		}
+		return nbr;
+	}
+	
+	public static int verificationHorizontalGauche(GridPrinc grid,int couleur, int i,int j){
+		
+		int nbr=0;
+		int k=j-1;
+
+		
+		while (k>=0 && type(grid.grille[i][k].mCase.getIndice(), couleur)){
+			nbr++;
+			k--;
+		}
+		return nbr;
+	}
+	
+	public static int verificationVerticaleBas(GridPrinc grid,int couleur, int i,int j)
+	{
+		int nbr = 0;
+		int k=i+1;
+		while (k<grid.getNbrV() && type(grid.grille[k][j].mCase.getIndice(), couleur))
+		{
+			nbr++;
+			k++;
+		}
+
+		return nbr;
+	}
+	
+	public static int verificationHorizontalDroite(GridPrinc grid,int couleur, int i,int j)
+	{
+		int nbr=0;
+		int k=j+1;
+		while (k<grid.getNbrH() && type(grid.grille[i][k].mCase.getIndice(), couleur))
+		{
+			nbr++;
+			k++;
+		}
+		
+		return nbr;
+	}
+	
+	public static int verificationVerticale(GridPrinc grid, int couleur, int y, int x){
+		
+		int total = 1;
+		
+		total +=verificationVerticaleBas( grid, couleur,  y, x);
+		total +=verificationVerticaleHaut( grid, couleur,  y, x);
+		return total;
+	}
+	
+public static int verificationHorizontal(GridPrinc grid, int couleur, int y, int x){
+		
+		int total = 1;
+		
+		total += verificationHorizontalDroite(grid,couleur, y, x);
+		total += verificationHorizontalGauche(grid,couleur, y, x);
+		return total;
+	}
+	
+	public static boolean verificationCoteACote(int[] x, int[] y, GridPrinc grid ){
+			
+		if( ((Math.abs(x[1] - x[0]) == 1) && (y[1]==y[0])) || ((Math.abs(y[1] - y[0]) == 1) && (x[1]==x[0])))
+			if (grid.grille[y[0]][x[0]].mCase.getIndice() != grid.grille[y[1]][x[1]].mCase.getIndice())		
+				return true;
+		
+		return false ;
+	}
+	
+	public static boolean verificationLigne(GridPrinc grid, int[] y,int[] x){
+		
+		int []nbrh = new int[2];
+		int []nbrv = new int[2];
+		
+		for (int i=0; i<2; i++){
+			nbrh[i]= verificationHorizontal(grid,grid.grille[y[i]][x[i]].mCase.getIndice(),y[i],x[i]);
+			nbrv[i]= verificationVerticale(grid,grid.grille[y[i]][x[i]].mCase.getIndice(),y[i],x[i]);
+			if (nbrh[i]>=3 || nbrv[i]>=3)
+				return true;	
+		}
+		
+		return false;
+	}
+	
+	public static boolean type(int indice, int couleur){
+		for(int i=0; i < 4; i++)
+		if(indice == couleur || indice == couleur+10 || indice == couleur-10|| indice == couleur+20 || indice == couleur-20)
+			return true;
+		return false;
+	}
+}

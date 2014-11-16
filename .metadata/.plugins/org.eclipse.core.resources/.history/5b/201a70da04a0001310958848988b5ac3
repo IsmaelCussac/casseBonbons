@@ -1,0 +1,18 @@
+package com.jeupoo.main;
+
+public class Case {
+	
+	private boolean empty = false;
+
+	public Case(){
+		
+		
+	}
+	
+	public boolean isEmpty(){
+		return empty ;
+		
+	}
+	
+	
+}

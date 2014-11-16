@@ -1,0 +1,181 @@
+package com.jeupoo.main;
+
+import java.util.HashMap;
+import java.util.Random;
+
+import com.jeupoo.animations.Animation;
+import com.jeupoo.animations.AnimationComble;
+import com.jeupoo.animations.AnimationGenerate;
+import com.jeupoo.animations.AnimationStop;
+
+import android.graphics.Bitmap;
+
+public class GridPrinc {
+	
+	public Movable[][] grille ;
+	private int nbrV;
+	private int nbrH;
+	private Animation anim;
+	public HashMap<Integer, Bitmap> icon;
+	public int[] dimEcran;
+	public int alea;
+	Score point = new Score();
+	public float margeHori;
+	public float margeVerti;
+	public float hauteurCase;
+	public float largeurCase;
+	int [][]gridDup = new int[nbrV][nbrH];
+	
+
+	public GridPrinc(HashMap<Integer, Bitmap> icon, int nbrV, int nbrH, int alea){
+		grille = new Movable[nbrV][nbrH];
+		this.nbrH = nbrH;
+		this.nbrV = nbrV;
+		this.icon = icon;
+		this.alea = alea;
+	}
+	
+	public void generationGrille (int[] dimEcran, int color){
+		this.dimEcran = dimEcran;
+		margeHori = (float) (0.015*dimEcran[1]);
+		margeVerti = (float) (0.1*dimEcran[0]);
+		hauteurCase = (float) (0.11*dimEcran[1]);
+		largeurCase = (float) (0.105*dimEcran[1]);
+		
+		Random rnd = new Random();
+		int nombre = 0, maxV, maxH;
+		
+		for (int i=0; i<nbrV; i++)
+			for (int j=0; j<nbrH; j++){
+				maxV = 5; maxH = 5;
+				while(maxH > 2 || maxV > 2){
+					nombre = rnd.nextInt(color);
+					maxV = Verification.verificationVerticaleHaut(this,nombre,i,j);
+					maxH = Verification.verificationHorizontalGauche(this,nombre,i,j);
+				}
+				grille[i][j] = new BonbonDeBase(icon.get(nombre), nombre);
+				grille[i][j].setPosition((int)(margeHori+j*largeurCase), (int)(margeVerti+i*hauteurCase));
+			}
+		setAnimation(new AnimationGenerate(trans()));
+	}
+	
+	public Movable[] trans(){
+		
+		Movable[] grille1D = new Movable[nbrV*nbrH];
+		int k = 0;
+		
+		for(int i=nbrV-1; i>=0; i--)
+			for(int j=0; j<nbrH; j++){	
+				grille1D[k]=grille[i][j];
+				k++;
+			}
+		return grille1D;
+	}
+	
+	public void clique(float[] xClic, float[] yClic){	
+		
+		int[] x = new int[2];
+		int[] y = new int[2];
+	
+		for (int i = 0; i < xClic.length; i++){
+			x[i] = (int) ((xClic[i] - margeHori) / largeurCase);
+			y[i] = (int) ((yClic[i] - margeVerti) / hauteurCase) ;
+		}
+		 
+		int tmp1 = grille[y[0]][x[0]].getIndice();
+		if(tmp1 >= 10){
+			grille[y[0]][x[0]].bombe(this, gridDup, y[0], x[0]);
+		}
+		
+		int tmp2 = grille[y[1]][x[1]].getIndice();
+		Bitmap bit1 = grille[y[0]][x[0]].getBitmap();
+		Bitmap bit2 = grille[y[1]][x[1]].getBitmap();
+		
+		if(Verification.verificationCoteACote(x, y,this)) {
+			grille[y[0]][x[0]].setIndice(tmp2);
+			grille[y[1]][x[1]].setIndice(tmp1);
+		
+			if (!Verification.verificationLigne(this, y, x)){	
+				grille[y[0]][x[0]].setIndice(tmp1);
+				grille[y[1]][x[1]].setIndice(tmp2);
+			}
+			else{
+				grille[y[0]][x[0]].setBitmap(bit2);
+				grille[y[1]][x[1]].setBitmap(bit1);	
+				Supprimer();
+				
+			}	
+		}
+	}
+
+	public void Supprimer(){
+		gridDup = Automate.parcours(this);
+		int compt =0;
+		point.compterPoints(gridDup, this);
+		
+		for(int i = 0; i<getNbrV(); i++)
+			for(int j = 0 ; j<getNbrH(); j++)
+				
+				switch (gridDup[i][j]){
+				case -1: break;
+				case 10:
+					grille[i][j] = new BonbonRaye(icon.get(gridDup[i][j]), gridDup[i][j]);
+					grille[i][j].setPosition((int)(margeHori+j*largeurCase), (int)(margeVerti+i*hauteurCase));
+					break;
+				case 11:
+					grille[i][j] = new BonbonRaye(icon.get(gridDup[i][j]), gridDup[i][j]);
+					grille[i][j].setPosition((int)(margeHori+j*largeurCase), (int)(margeVerti+i*hauteurCase));
+					break;
+				case 12:
+					grille[i][j] = new BonbonRaye(icon.get(gridDup[i][j]), gridDup[i][j]);
+					grille[i][j].setPosition((int)(margeHori+j*largeurCase), (int)(margeVerti+i*hauteurCase));
+					break;
+				case 13:
+					grille[i][j] = new BonbonRaye(icon.get(gridDup[i][j]), gridDup[i][j]);
+					grille[i][j].setPosition((int)(margeHori+j*largeurCase), (int)(margeVerti+i*hauteurCase));
+					break;
+				case 14:
+					grille[i][j] = new BonbonRaye(icon.get(gridDup[i][j]), gridDup[i][j]);
+					grille[i][j].setPosition((int)(margeHori+j*largeurCase), (int)(margeVerti+i*hauteurCase));
+					break;
+				case 15:
+					grille[i][j] = new BonbonRaye(icon.get(gridDup[i][j]), gridDup[i][j]);
+					grille[i][j].setPosition((int)(margeHori+j*largeurCase), (int)(margeVerti+i*hauteurCase));
+					break;
+				case 20:
+					grille[i][j] = new BonbonChocolat(icon.get(gridDup[i][j]), gridDup[i][j]);
+					grille[i][j].setPosition((int)(margeHori+j*largeurCase), (int)(margeVerti+i*hauteurCase));
+					break;
+				default:
+					grille[i][j].setIndice(30);
+					grille[i][j].setBitmap(icon.get(30));
+					compt++;
+					break;
+				}
+
+		if (compt>0){
+			anim = new AnimationComble(trans());
+		}
+		else
+			anim = new AnimationStop(trans());
+		
+	}
+
+	public Animation getAnimation(){
+		return anim;
+	}
+	
+	public void setAnimation(Animation anim){
+		this.anim = anim;
+	}
+	
+	public int getNbrH(){
+		return nbrH;
+	}
+
+	public int getNbrV() {
+		return nbrV;
+	}
+
+
+}

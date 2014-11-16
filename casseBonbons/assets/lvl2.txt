@@ -1,0 +1,10 @@
+lvl::2
+col::5
+largeur::9
+hauteur::9
+coups::-1
+temps::-1
+difficulte::-1
+points::2000
+suiv::lvl3.txt
+malus::0

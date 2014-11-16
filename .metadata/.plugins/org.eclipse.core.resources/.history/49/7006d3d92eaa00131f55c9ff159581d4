@@ -1,0 +1,32 @@
+package com.jeupoo.main;
+
+import android.graphics.Bitmap;
+import android.graphics.Paint;
+
+public class BonbonChocolat extends Movable{
+	
+	public final int valeur = 500;	
+	
+	
+	public BonbonChocolat(Bitmap bitmap, int indice) {
+		this.indice = indice;
+		this.bitmap = bitmap;
+		paint = new Paint();
+		isMoved = false;
+	}
+
+	public int getValeur() {
+		return valeur;
+	}
+	
+	public void bombe(GridPrinc grid, int[][] gridDup, int y, int x) {
+		if(!grid.grille[y][x].isEmpty()){
+			for (int i = 0; i<grid.getNbrV(); i++)
+				for (int j=0; j <grid.getNbrH(); j++)
+					if (grid.grille[i][j].mCase.getIndice() == grid.grille[y][x].mCase.getIndice()){
+						actionBombe(grid, gridDup, i, j);
+					}
+			grid.point.Add(valeur);			
+		}
+	}
+}

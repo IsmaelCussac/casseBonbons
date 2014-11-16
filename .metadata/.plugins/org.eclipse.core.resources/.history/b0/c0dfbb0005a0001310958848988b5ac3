@@ -1,0 +1,63 @@
+package com.jeupoo.main;
+
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+
+public class Movable implements GObjet{
+	
+	protected Paint paint;
+	protected Bitmap bitmap ;
+	protected int cx, cy, indice;
+
+	public void paint(Canvas canvas, int dt, int iHeight) {
+		canvas.drawBitmap(bitmap, cx, iHeight, paint);
+	}
+
+	public int getY() {
+		return cy;
+	}
+
+	public int getX() {
+		return cx;
+	}
+
+	public void setPosition(int cx, int cy) {	
+		this.cx = cx;
+		this.cy = cy;
+	}
+
+	public int getIndice() {	
+		return indice;
+	}
+
+	public void setIndice(int indice) {
+		this.indice = indice;
+	}
+	
+	public Bitmap getBitmap() {
+		return bitmap;
+	}
+
+	public void setBitmap(Bitmap bitmap) {
+		this.bitmap = bitmap;
+	}
+	
+	protected void actionBombe(GridPrinc grid, int[][]gridDup, int y, int x){
+		
+		gridDup[y][x] = grid.grille[y][x].getIndice();
+		testBombe(grid, y, x);
+		grid.grille[y][x].setIndice(30);
+	}
+	
+	private void testBombe(GridPrinc grid, int y, int x) {
+		if(grid.grille[y][x].getIndice() >= 10 && grid.grille[y][x].getIndice() < 20)
+			grid.point.Add(getValeur());
+		if(grid.grille[y][x].getIndice() == 20)
+			grid.point.Add(getValeur());
+	}
+	
+	public abstract int getValeur();
+	public abstract void bombe(GridPrinc grid, int[][] gridDup, int y, int x);
+	
+}
